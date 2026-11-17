@@ -75,8 +75,19 @@ class LocalizacaoController(
         Lugar(
             latitude = -25.246243,
             longitude = -50.021782
-        )
+        ),
 
+        // Praça Barão do Rio Branco - Ponta Grossa
+        Lugar(
+            latitude = -25.0994246,
+            longitude = -50.1583223
+        ),
+
+        // Região do Lago de Olarias - confirmar centro exato em teste GPS
+        Lugar(
+            latitude = -25.111111,
+            longitude = -50.137778
+        )
     )
 
     private var manager: LocationManager? = null

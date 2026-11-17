@@ -43,8 +43,8 @@ class CameraFragment : Fragment() {
     private lateinit var textoVidas: TextView
     private lateinit var textoExploracao: TextView
     private lateinit var sharedViewModel: SharedModelViewModel
-
     private val localizacaoController = LocalizacaoController(this)
+
     private val guitarras = listOf("angus_sg.glb", "ibanez_jem_guitar.glb", "jimR_jazzmaster.glb")
     private var currentModelFile = "guitar_pick.glb"
     private var descobertaAtual: String? = null
@@ -121,8 +121,14 @@ class CameraFragment : Fragment() {
             currentModelFile = sharedViewModel.selectedModel.value!!
         }
         verificarCamera()
+        // Localização e câmera são independentes; o controlador cria o painel de endereço.
         localizacaoController.conectar(view as ViewGroup) { arquivo ->
-            if (sharedViewModel.jogoEncerrado.value != true) sharedViewModel.selectModel(arquivo)
+            if (sharedViewModel.jogoEncerrado.value != true) {
+                sharedViewModel.registrarEncontro(arquivo)
+                val guitarra = if (arquivo in guitarras) arquivo else
+                    guitarras.firstOrNull { !sharedViewModel.respondidas.contains(it) }
+                if (guitarra != null) revelarGuitarra(guitarra)
+            }
         }
         placeButton.bringToFront()
         investigarButton.bringToFront()
