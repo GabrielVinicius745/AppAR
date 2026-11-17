@@ -2,6 +2,7 @@ package com.ifpr.androidapptemplatear.ui
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.media.ToneGenerator
@@ -177,7 +178,7 @@ class CameraFragment : Fragment() {
                 descobertaAtual = null
                 investigarButton.visibility = View.GONE
                 if (sharedViewModel.jogoEncerrado.value == true) {
-                    textoExploracao.text = "Três erros. A tela Game Over será adicionada na Fase 4."
+                    encerrarJogo("Você errou três desafios musicais.")
                 } else {
                     textoExploracao.text = "Continue explorando para encontrar outra guitarra."
                 }
@@ -192,6 +193,15 @@ class CameraFragment : Fragment() {
             tone.startTone(ToneGenerator.TONE_PROP_ACK, 250)
             sceneView.postDelayed({ tone.release() }, 400)
         }
+    }
+
+    private fun encerrarJogo(motivo: String) {
+        if (!isAdded) return
+        val intent = Intent(requireContext(), GameOverActivity::class.java)
+            .putExtra("motivo", motivo)
+            .putExtra("pontos", sharedViewModel.pontuacao.value ?: 0)
+        startActivity(intent)
+        requireActivity().finish()
     }
 
     private fun existeAsset(arquivo: String): Boolean = runCatching {
