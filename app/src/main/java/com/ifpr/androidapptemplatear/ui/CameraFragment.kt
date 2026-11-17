@@ -43,6 +43,7 @@ class CameraFragment : Fragment() {
     private lateinit var textoExploracao: TextView
     private lateinit var sharedViewModel: SharedModelViewModel
 
+    private val localizacaoController = LocalizacaoController(this)
     private val guitarras = listOf("angus_sg.glb", "ibanez_jem_guitar.glb", "jimR_jazzmaster.glb")
     private var currentModelFile = "guitar_pick.glb"
     private var descobertaAtual: String? = null
@@ -119,6 +120,9 @@ class CameraFragment : Fragment() {
             currentModelFile = sharedViewModel.selectedModel.value!!
         }
         verificarCamera()
+        localizacaoController.conectar(view as ViewGroup) { arquivo ->
+            if (sharedViewModel.jogoEncerrado.value != true) sharedViewModel.selectModel(arquivo)
+        }
         placeButton.bringToFront()
         investigarButton.bringToFront()
     }
